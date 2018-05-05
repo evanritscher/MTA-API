@@ -1,0 +1,11 @@
+{
+  "name": "MTA",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "<evan.ritscher@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.18.0",
+    "gtfs-realtime-bindings": "^0.0.4"
+  }
+}
