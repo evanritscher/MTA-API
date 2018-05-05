@@ -1,10 +1,18 @@
 require('dotenv').load();
-const MTA = require('./mtaEngine');
+const MTA = require('./lib/mtaEngine');
+const incomingTrains = require('./examples/incomingTrains');
 
 const instance = new MTA();
-instance.addFeed(1, (data) => console.log('21', data))
-  .catch(err => console.log('An error occured on the first request'))
-;
-// .then(() => {
-//   instance.subscribeToFeed(21, (data) => console.log('subbed after the fact, ', data));
-// });
+instance.addFeed(2, (data) => {
+  const incoming = incomingTrains(data, 'L08');
+  console.log(incoming);
+})
+  .then(() => {
+    // a feed has been requested and responded successfully. 
+    // you can assume there is data and new requests can be subscribed to. 
+  })
+  .catch((err) => {
+    console.log('An error occured on the first request');
+    console.log(err);
+  });
+
