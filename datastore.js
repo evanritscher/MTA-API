@@ -25,7 +25,20 @@ class DataStore {
 
   }
   _notify(feedID) {
-    this.subscriptions[feedID].forEach(cbFunc => cbFunc(this.store[feedID]));
+    let dataToSend = {};
+
+    if (this.store[feedID].data) {
+      if (this.store[feedID].error && (this.store[feedID].error.timestamp > this.store[feedID].data.timestamp)) {
+        dataToSend = this.store[feedID];
+      } else {
+        dataToSend = this.store[feedID].data;
+      }
+    } else {
+
+      dataToSend = this.store[feedID].error || {};
+    }
+
+    this.subscriptions[feedID].forEach(cbFunc => cbFunc(dataToSend));
   }
 
   addNotification(feedID, cb) {

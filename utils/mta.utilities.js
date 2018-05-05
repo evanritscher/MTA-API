@@ -1,22 +1,3 @@
-const axios = require('axios');
-const GtfsRealtimeBindings = require('gtfs-realtime-bindings');
-
-function makeRequest(key, feedID) {
-  const requestSettings = {
-    url: `http://datamine.mta.info/mta_esi.php?key=${key}&feed_id=${feedID}`,
-    method: 'GET',
-    responseType: 'arraybuffer',
-  };
-  return axios(requestSettings)
-    .then((res) => {
-      const feed = GtfsRealtimeBindings.FeedMessage.decode(res.data);
-      this.DataStore.set({ data: feed, error: false, feedID, timestamp: Date.now() });
-    })
-    .catch((err) => {
-      this.DataStore.set({ data: err, error: true, feedID, timestamp: Date.now() });
-    });
-}
-
 function parseTripFeed(rawFeed, stopID) {
   const parseObj = (t, s) => ({
     routeId: t.route_id,
@@ -36,6 +17,23 @@ function parseTripFeed(rawFeed, stopID) {
 }
 
 module.exports = {
-  makeRequest,
   parseTripFeed
 };
+
+// instance.addFeed(1)
+//   .then(() => {
+//     instance.subscribeToFeed(1, data => console.log('1', data));
+//   });
+
+// checkForTrains(feedID, stopID) {
+//   const fullFeed = this.DataStore.get(feedID);
+//   if (fullFeed.data) {
+//     const payload = {};
+//     payload.data = parseTripFeed(fullFeed.data.data, stopID);
+//     if (fullFeed.error && (fullFeed.error.timestamp > fullFeed.data.timestamp)) {
+//       payload.error = fullFeed.error;
+//     }
+//     return payload;
+//   }
+//   return fullFeed;
+// }
