@@ -34,8 +34,7 @@ class DataStore {
         dataToSend = this.store[feedID].data;
       }
     } else {
-
-      dataToSend = this.store[feedID].error || {};
+      dataToSend = this.store[feedID] || {};
     }
 
     this.subscriptions[feedID].forEach(cbFunc => cbFunc(dataToSend));

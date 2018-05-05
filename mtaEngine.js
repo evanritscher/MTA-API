@@ -15,8 +15,11 @@ function makeRequest(key, feedID) {
       const feed = GtfsRealtimeBindings.FeedMessage.decode(res.data);
       this.DataStore.set({ data: feed, error: false, feedID, timestamp: Date.now() });
     })
+    // throw error to allow catching in the first request from add feed. 
+    // in subsequant requests if an error occurs, the error will be swallowed and not returned.
     .catch((err) => {
       this.DataStore.set({ data: err, error: true, feedID, timestamp: Date.now() });
+      throw new Error(err);
     });
 }
 
@@ -29,7 +32,7 @@ class MTA {
   }
 
   addFeed(feedID, subscribeCB) {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       if (this.trackedFeeds.includes(feedID)) {
         console.log(`The feed, ${feedID} is already being tracked`); //eslint-disable-line no-console
         return;
@@ -40,13 +43,15 @@ class MTA {
       const boundMakeRequest = makeRequest.bind(this);
 
       setInterval(() => {
-        boundMakeRequest(this.getKey(), feedID);
+        boundMakeRequest(this.getKey(), feedID)
+          .catch(err => err);
       }, 15000);
 
-      // Allows you to inform the caller that the first request has gone through. 
-      // Could be unsuccessful but it's gone through.
+      // Allows you to inform the caller that the first request has gone through.
+      // Will reject if fails on first request but subsequant requests will not and error is just swallowed. 
       boundMakeRequest(this.getKey(), feedID)
-        .then(() => resolve());
+        .then(() => resolve())
+        .catch((err) => reject(err));
 
       this.trackedFeeds.push(feedID);
 
