@@ -7,11 +7,14 @@ class MTA {
     this.trackedFeeds = [];
   }
 
-  addFeed(feedID) {
+  addFeed(feedID, subscribeCB) {
     return new Promise((resolve) => {
       if (this.trackedFeeds.includes(feedID)) {
         console.log(`The feed, ${feedID} is already being tracked`); //eslint-disable-line no-console
         return;
+      }
+      if (subscribeCB) {
+        this.DataStore.addNotification(feedID, subscribeCB);
       }
       const boundMakeRequest = makeRequest.bind(this);
 

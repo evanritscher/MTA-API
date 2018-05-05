@@ -2,14 +2,14 @@ require('dotenv').load();
 const MTA = require('./mtaEngine');
 
 const instance = new MTA();
-instance.addFeed(21)
+instance.addFeed(21, (data) => console.log('21', data))
   .then(() => {
-    instance.subscribeToFeed(21, (data) => console.log('21', data));
+    instance.subscribeToFeed(21, (data) => console.log('subbed after the fact, ', data));
   });
-instance.addFeed(1)
-  .then(() => {
-    instance.subscribeToFeed(1, data => console.log('1', data));
-  });
+// instance.addFeed(1)
+//   .then(() => {
+//     instance.subscribeToFeed(1, data => console.log('1', data));
+//   });
 
 // checkForTrains(feedID, stopID) {
 //   const fullFeed = this.DataStore.get(feedID);
