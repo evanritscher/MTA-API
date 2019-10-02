@@ -4,8 +4,9 @@ const incomingTrains = require('./examples/incomingTrains');
 const subwayStatus = require('./examples/subwayStatus');
 
 const instance = new MTA();
-instance.addFeed(2, (data) => {
+instance.addFeed('l', (data) => {
   const incoming = incomingTrains(data, 'L08');
+  console.log('shit')
   console.log(incoming); // eslint-disable-line no-console
 })
   .then(() => {
@@ -17,9 +18,9 @@ instance.addFeed(2, (data) => {
   });
 
 
-instance.getStatus()
-  .then(res => {
-    const t = subwayStatus(res, '123');
-    console.log(t); // eslint-disable-line no-console
-  });
+// instance.getStatus()
+//   .then(res => {
+//     const t = subwayStatus(res, '123');
+//     console.log(t); // eslint-disable-line no-console
+  // });
 

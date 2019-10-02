@@ -20,6 +20,7 @@ function parseTripFeed(rawFeed, stopID) {
 
 // get train arrival time for a given stopID
 function incomingTrains(feed, stopID) {
+  console.log(feed, stopID)
   if (feed.data) {
     const payload = {};
     payload.data = parseTripFeed(feed.data, stopID);
