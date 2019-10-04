@@ -6,7 +6,6 @@ const subwayStatus = require('./examples/subwayStatus');
 const instance = new MTA();
 instance.addFeed('l', (data) => {
   const incoming = incomingTrains(data, 'L08');
-  console.log('shit')
   console.log(incoming); // eslint-disable-line no-console
 })
   .then(() => {
